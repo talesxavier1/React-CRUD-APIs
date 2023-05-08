@@ -9,6 +9,9 @@ public class PositionModel {
     [BsonElement("position")]
     public string position { get; set; }
 
+    [BsonElement("dataController")]
+    public ControllerModel dataController;
+
     public PositionModel() {
         this.codigo = Guid.NewGuid().ToString();
     }

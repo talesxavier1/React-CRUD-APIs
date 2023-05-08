@@ -9,6 +9,9 @@ public class AcademicBackgroundModel {
     [BsonElement("education")]
     public string education { get; set; }
 
+    [BsonElement("dataController")]
+    public ControllerModel dataController;
+
     public AcademicBackgroundModel() {
         this.codigo = Guid.NewGuid().ToString();
     }

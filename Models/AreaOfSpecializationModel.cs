@@ -9,6 +9,9 @@ public class AreaOfSpecializationModel {
     [BsonElement("area")]
     public string area { get; set; }
 
+    [BsonElement("dataController")]
+    public ControllerModel dataController;
+
     public AreaOfSpecializationModel() {
         this.codigo = Guid.NewGuid().ToString();
     }
