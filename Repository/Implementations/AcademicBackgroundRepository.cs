@@ -24,7 +24,7 @@ public class AcademicBackgroundRepository : IAcademicBackgroundRepository {
         return true;
     }
 
-    public long count(string? codigoRef) {
+    public long count() {
         long result = collection.CountDocuments(DOC => DOC.dataController.active == true);
         return result;
     }
