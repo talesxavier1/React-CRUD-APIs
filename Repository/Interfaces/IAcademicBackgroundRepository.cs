@@ -8,6 +8,6 @@ public interface IAcademicBackgroundRepository {
     public Boolean updateAcademicBackground(AcademicBackgroundModel academicBackgroundModel, UserModel User);
     public Boolean deleteAcademicBackground(String codigo);
     public Boolean logicalDeleteAcademicBackground(String[] codigos, UserModel user);
-    public long count(String? codigoRef);
+    public long count();
 }
 
