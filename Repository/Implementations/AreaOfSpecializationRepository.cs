@@ -15,16 +15,20 @@ public class AreaOfSpecializationRepository : IAreaOfSpecializationRepository {
     }
 
     public bool addAreaOfSpecialization(AreaOfSpecializationModel areaOfSpecializationModel, UserModel user) {
-        areaOfSpecializationModel.dataController = new ControllerModel() {
-            active = true,
-            postDate = DateTime.UtcNow.AddHours(-3),
-            userPost = user.userToken
-        };
-        collection.InsertOne(areaOfSpecializationModel);
-        return true;
+        try {
+            areaOfSpecializationModel.dataController = new ControllerModel() {
+                active = true,
+                postDate = DateTime.UtcNow.AddHours(-3),
+                userPost = user.userToken
+            };
+            collection.InsertOne(areaOfSpecializationModel);
+            return true;
+        } catch (Exception) {
+            return false;
+        }
     }
 
-    public long count(string? codigoRef) {
+    public long count() {
         long result = collection.CountDocuments(DOC => DOC.dataController.active == true);
         return result;
     }
