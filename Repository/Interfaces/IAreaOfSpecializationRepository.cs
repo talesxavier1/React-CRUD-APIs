@@ -9,7 +9,7 @@ public interface IAreaOfSpecializationRepository {
     public Boolean updateAreaOfSpecialization(AreaOfSpecializationModel areaOfSpecializationModel, UserModel User);
     public Boolean deleteAreaOfSpecialization(String codigo);
     public Boolean logicalDeleteAreaOfSpecialization(String[] codigos, UserModel user);
-    public long count(String? codigoRef);
+    public long count();
 
 }
 
