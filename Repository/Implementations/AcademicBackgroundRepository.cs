@@ -15,13 +15,17 @@ public class AcademicBackgroundRepository : IAcademicBackgroundRepository {
     }
 
     public bool addAcademicBackground(AcademicBackgroundModel academicBackgroundModel, UserModel user) {
-        academicBackgroundModel.dataController = new ControllerModel() {
-            active = true,
-            postDate = DateTime.UtcNow.AddHours(-3),
-            userPost = user.userToken
-        };
-        collection.InsertOne(academicBackgroundModel);
-        return true;
+        try {
+            academicBackgroundModel.dataController = new ControllerModel() {
+                active = true,
+                postDate = DateTime.UtcNow.AddHours(-3),
+                userPost = user.userToken
+            };
+            collection.InsertOne(academicBackgroundModel);
+            return true;
+        } catch (Exception) {
+            return false;
+        }
     }
 
     public long count() {
