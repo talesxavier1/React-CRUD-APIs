@@ -103,7 +103,7 @@ public class ContactPersonController : Controller {
 
     [HttpGet]
     [Route("getContactById")]
-    public ActionResult<OperationResponseModel> modifyContact([FromHeader] string userToken, [FromQuery] string codigo) {
+    public ActionResult<OperationResponseModel> getContactById([FromHeader] string userToken, [FromQuery] string codigo) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
