@@ -14,18 +14,21 @@ public class PositionRepository : IPositionRepository {
         collection = database.GetCollection<PositionModel>("Position");
     }
 
-
     public bool addPosition(PositionModel positionsModel, UserModel user) {
-        positionsModel.dataController = new ControllerModel() {
-            active = true,
-            postDate = DateTime.UtcNow.AddHours(-3),
-            userPost = user.userToken
-        };
-        collection.InsertOne(positionsModel);
-        return true;
+        try {
+            positionsModel.dataController = new ControllerModel() {
+                active = true,
+                postDate = DateTime.UtcNow.AddHours(-3),
+                userPost = user.userToken
+            };
+            collection.InsertOne(positionsModel);
+            return true;
+        } catch (Exception) {
+            return false;
+        }
     }
 
-    public long count(string? codigoRef) {
+    public long count() {
         long result = collection.CountDocuments(DOC => DOC.dataController.active == true);
         return result;
     }
