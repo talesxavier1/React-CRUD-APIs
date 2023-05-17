@@ -90,7 +90,7 @@ public class PersonCOntroller : Controller {
         return StatusCode(200, response);
     }
 
-    [HttpGet]
+    [HttpPost]
     [Route("getPersonsByStringQuery")]
     public ActionResult<OperationResponseModel> getPersonsByStringQuery([FromHeader] String userToken, [FromBody] String query) {
         OperationResponseModel response = new();
