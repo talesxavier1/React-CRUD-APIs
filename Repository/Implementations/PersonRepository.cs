@@ -90,5 +90,13 @@ public class PersonRepository : IPersonRepository {
     public long countPersons() {
         return collection.CountDocuments<PersonModel>(DOC => DOC.dataController.active);
     }
+
+    public List<PersonModel> getPersonsByStringQuery(string query) {
+        try {
+            return collection.Find<PersonModel>(query).ToList<PersonModel>();
+        } catch (Exception) {
+            return new List<PersonModel>();
+        }
+    }
 }
 
