@@ -92,7 +92,7 @@ public class PersonCOntroller : Controller {
 
     [HttpPost]
     [Route("getPersonsByStringQuery")]
-    public ActionResult<OperationResponseModel> getPersonsByStringQuery([FromHeader] String userToken, [FromBody] String query) {
+    public ActionResult<OperationResponseModel> getPersonsByStringQuery([FromHeader] String userToken, [FromBody] String queryB64) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -101,7 +101,12 @@ public class PersonCOntroller : Controller {
             return StatusCode(401, response);
         }
 
+
+        byte[] valueBytes = System.Convert.FromBase64String(queryB64);
+        string query = System.Text.Encoding.UTF8.GetString(valueBytes);
+
         response.data = new PersonRepository().getPersonsByStringQuery(query);
+        response.oparationStatus = Status.OK;
 
         return StatusCode(200, response);
     }
