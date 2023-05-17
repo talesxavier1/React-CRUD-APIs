@@ -91,6 +91,22 @@ public class PersonCOntroller : Controller {
     }
 
     [HttpGet]
+    [Route("getPersonsByStringQuery")]
+    public ActionResult<OperationResponseModel> getPersonsByStringQuery([FromHeader] String userToken, [FromBody] String query) {
+        OperationResponseModel response = new();
+
+        if (!new UserRepository().validateToken(userToken)) {
+            response.oparationStatus = Status.NOK;
+            response.message = "userToken Inválido.";
+            return StatusCode(401, response);
+        }
+
+        response.data = new PersonRepository().getPersonsByStringQuery(query);
+
+        return StatusCode(200, response);
+    }
+
+    [HttpGet]
     [Route("countPersons")]
     public ActionResult<OperationResponseModel> countPersons([FromHeader] String userToken) {
         OperationResponseModel response = new();

@@ -27,11 +27,17 @@ public class AddressModel {
     [BsonElement("cidade")]
     public string cidade { get; set; }
 
+    [BsonElement("cidadeID")]
+    public string cidadeID { get; set; }
+
     [BsonElement("codigoIBGECidade")]
     public string codigoIBGECidade { get; set; }
 
     [BsonElement("estado")]
     public string estado { get; set; }
+
+    [BsonElement("estadoID")]
+    public string estadoID { get; set; }
 
     [BsonElement("codigoIBGEEstado")]
     public string codigoIBGEEstado { get; set; }
@@ -43,4 +49,3 @@ public class AddressModel {
         this.codigo = Guid.NewGuid().ToString();
     }
 }
-
