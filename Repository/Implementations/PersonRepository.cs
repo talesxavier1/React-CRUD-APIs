@@ -1,4 +1,5 @@
 ﻿using MongoDB.Driver;
+using Newtonsoft.Json;
 using SingularChatAPIs.BD;
 using SingularChatAPIs.Models;
 using SingularChatAPIs.Repository.Interfaces;
@@ -87,13 +88,32 @@ public class PersonRepository : IPersonRepository {
         return result.ModifiedCount > 0;
     }
 
+    public long countPersons(string query) {
+        dynamic? queryObject = JsonConvert.DeserializeObject<dynamic>(query);
+        if (queryObject == null) {
+            return 0;
+        }
+        queryObject["dataController.active"] = true;
+        string finalQueryString = JsonConvert.SerializeObject(queryObject);
+
+        return collection.Find(finalQueryString).CountDocuments();
+    }
+
     public long countPersons() {
         return collection.CountDocuments<PersonModel>(DOC => DOC.dataController.active);
     }
 
-    public List<PersonModel> getPersonsByStringQuery(string query) {
+    public List<PersonModel> getPersonsByStringQuery(string query, int skip, int take) {
         try {
-            return collection.Find<PersonModel>(query).ToList<PersonModel>();
+            dynamic? queryObject = JsonConvert.DeserializeObject<dynamic>(query);
+            if (queryObject == null) {
+                return new List<PersonModel>();
+            }
+            queryObject["dataController.active"] = true;
+
+            string finalQueryString = JsonConvert.SerializeObject(queryObject);
+
+            return collection.Find<PersonModel>(finalQueryString).Skip(skip).Limit(take).ToList<PersonModel>();
         } catch (Exception) {
             return new List<PersonModel>();
         }

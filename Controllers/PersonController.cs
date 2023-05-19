@@ -92,7 +92,7 @@ public class PersonCOntroller : Controller {
 
     [HttpPost]
     [Route("getPersonsByStringQuery")]
-    public ActionResult<OperationResponseModel> getPersonsByStringQuery([FromHeader] String userToken, [FromBody] String queryB64) {
+    public ActionResult<OperationResponseModel> getPersonsByStringQuery([FromHeader] String userToken, [FromBody] string queryB64, [FromQuery] int skip, [FromQuery] int take) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -101,14 +101,24 @@ public class PersonCOntroller : Controller {
             return StatusCode(401, response);
         }
 
+        try {
+            byte[] valueBytes = System.Convert.FromBase64String(queryB64);
+            string stringFilter = System.Text.Encoding.UTF8.GetString(valueBytes);
 
-        byte[] valueBytes = System.Convert.FromBase64String(queryB64);
-        string query = System.Text.Encoding.UTF8.GetString(valueBytes);
+            response.data = new {
+                data = new PersonRepository().getPersonsByStringQuery(stringFilter, skip, take),
+                conut = new PersonRepository().countPersons(stringFilter)
+            };
 
-        response.data = new PersonRepository().getPersonsByStringQuery(query);
-        response.oparationStatus = Status.OK;
+            response.oparationStatus = Status.OK;
 
-        return StatusCode(200, response);
+            return StatusCode(200, response);
+        } catch (Exception e) {
+            response.oparationStatus = Status.NOK;
+            response.message = e.ToString();
+            return StatusCode(500, response);
+        }
+
     }
 
     [HttpGet]
@@ -121,7 +131,7 @@ public class PersonCOntroller : Controller {
             response.message = "userToken Inválido.";
             return StatusCode(401, response);
         }
-        long result = new PersonRepository().countPersons();
+        long result = new PersonRepository().countPersons("");
         response.oparationStatus = Status.OK;
         response.data = result;
         return Ok(response);
