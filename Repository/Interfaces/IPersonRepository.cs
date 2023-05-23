@@ -4,8 +4,9 @@ namespace SingularChatAPIs.Repository.Interfaces;
 public interface IPersonRepository {
     public Boolean addPerson(PersonModel person, UserModel user);
     public PersonModel getPersonById(String id);
-    public List<PersonModel> getPersonsByStringQuery(string query);
+    public List<PersonModel> getPersonsByStringQuery(string query, int skip, int take);
     public List<PersonModel> getPersonList(int skip, int take);
+    public long countPersons(string query);
     public long countPersons();
     public Boolean updatePerson(PersonModel person, UserModel user);
     public Boolean deletePerson(String id);
