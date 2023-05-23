@@ -153,7 +153,7 @@ public class PersonCOntroller : Controller {
             response.message = "userToken Inválido.";
             return StatusCode(401, response);
         }
-        long result = new PersonRepository().countPersons("");
+        long result = new PersonRepository().countPersons();
         response.oparationStatus = Status.OK;
         response.data = result;
         return Ok(response);
