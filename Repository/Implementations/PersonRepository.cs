@@ -107,7 +107,7 @@ public class PersonRepository : IPersonRepository {
         try {
             dynamic? queryObject = JsonConvert.DeserializeObject<dynamic>(query);
             if (queryObject == null) {
-                return new List<PersonModel>();
+                throw new Exception();
             }
             queryObject["dataController.active"] = true;
 
