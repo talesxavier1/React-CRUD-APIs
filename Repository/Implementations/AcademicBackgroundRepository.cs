@@ -1,4 +1,5 @@
 ﻿using MongoDB.Driver;
+using Newtonsoft.Json;
 using SingularChatAPIs.BD;
 using SingularChatAPIs.Models;
 using SingularChatAPIs.Repository.Interfaces;
@@ -33,6 +34,17 @@ public class AcademicBackgroundRepository : IAcademicBackgroundRepository {
         return result;
     }
 
+    public long count(string query) {
+        dynamic? queryObject = JsonConvert.DeserializeObject<dynamic>(query);
+        if (queryObject == null) {
+            return 0;
+        }
+        queryObject["dataController.active"] = true;
+        string finalQueryString = JsonConvert.SerializeObject(queryObject);
+
+        return collection.Find(finalQueryString).CountDocuments();
+    }
+
     public bool deleteAcademicBackground(string codigo) {
         DeleteResult result = collection.DeleteOne(DOC => DOC.codigo.Equals(codigo));
         return result.DeletedCount == 1;
@@ -45,6 +57,22 @@ public class AcademicBackgroundRepository : IAcademicBackgroundRepository {
 
     public List<AcademicBackgroundModel> getAcademicBackgrounds(int skip, int take) {
         return collection.Find(DOC => (DOC.dataController.active == true)).Skip(skip).Limit(take).ToList();
+    }
+
+    public List<AcademicBackgroundModel> getAcademicBackgroundsByQuery(int skip, int take, string query) {
+        try {
+            dynamic? queryObject = JsonConvert.DeserializeObject<dynamic>(query);
+            if (queryObject == null) {
+                throw new Exception();
+            }
+            queryObject["dataController.active"] = true;
+
+            string finalQueryString = JsonConvert.SerializeObject(queryObject);
+
+            return collection.Find<AcademicBackgroundModel>(finalQueryString).Skip(skip).Limit(take).ToList<AcademicBackgroundModel>();
+        } catch (Exception) {
+            return new List<AcademicBackgroundModel>();
+        }
     }
 
     public bool logicalDeleteAcademicBackground(string[] codigos, UserModel user) {
