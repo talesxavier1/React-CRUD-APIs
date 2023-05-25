@@ -33,7 +33,7 @@ public class PositionController : Controller {
 
     [HttpGet]
     [Route("countPositions")]
-    public ActionResult<OperationResponseModel> countPositions([FromHeader] string userToken) {
+    public ActionResult<OperationResponseModel> countPositions([FromHeader] string userToken, [FromQuery] string? query) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -42,7 +42,13 @@ public class PositionController : Controller {
             return StatusCode(401, response);
         }
 
-        long result = new PositionRepository().count();
+        long result;
+        if (query != null) {
+            result = new PositionRepository().count(query);
+        } else {
+            result = new PositionRepository().count();
+        }
+
         response.data = result;
         response.oparationStatus = Status.OK;
 

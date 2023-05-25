@@ -33,7 +33,7 @@ public class AreaOfSpecializationController : Controller {
 
     [HttpGet]
     [Route("countAreaOfSpecialization")]
-    public ActionResult<OperationResponseModel> countAreaOfSpecialization([FromHeader] string userToken) {
+    public ActionResult<OperationResponseModel> countAreaOfSpecialization([FromHeader] string userToken, [FromQuery] string? query) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -42,7 +42,13 @@ public class AreaOfSpecializationController : Controller {
             return StatusCode(401, response);
         }
 
-        long result = new AreaOfSpecializationRepository().count();
+        long result;
+        if (query != null) {
+            result = new AreaOfSpecializationRepository().count(query);
+        } else {
+            result = new AreaOfSpecializationRepository().count();
+        }
+
         response.data = result;
         response.oparationStatus = Status.OK;
 
@@ -68,7 +74,7 @@ public class AreaOfSpecializationController : Controller {
 
     [HttpGet]
     [Route("getAreasOfSpecialization")]
-    public ActionResult<OperationResponseModel> getAreasOfSpecialization([FromHeader] string userToken, [FromQuery] int skip, [FromQuery] int take) {
+    public ActionResult<OperationResponseModel> getAreasOfSpecialization([FromHeader] string userToken, [FromQuery] int skip, [FromQuery] int take, [FromQuery] string? query) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -77,7 +83,13 @@ public class AreaOfSpecializationController : Controller {
             return StatusCode(401, response);
         }
 
-        var result = new AreaOfSpecializationRepository().getAreasOfSpecialization(skip, take);
+        List<AreaOfSpecializationModel> result;
+        if (query != null) {
+            result = new AreaOfSpecializationRepository().getAreasOfSpecializationByQuery(skip, take, query);
+        } else {
+            result = new AreaOfSpecializationRepository().getAreasOfSpecialization(skip, take);
+        }
+
         response.data = result;
         response.oparationStatus = Status.OK;
         return Ok(response);
