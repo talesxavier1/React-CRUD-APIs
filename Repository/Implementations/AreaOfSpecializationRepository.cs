@@ -1,4 +1,5 @@
 ﻿using MongoDB.Driver;
+using Newtonsoft.Json;
 using SingularChatAPIs.BD;
 using SingularChatAPIs.Models;
 using SingularChatAPIs.Repository.Interfaces;
@@ -75,6 +76,33 @@ public class AreaOfSpecializationRepository : IAreaOfSpecializationRepository {
 
         UpdateResult result = collection.UpdateOne<AreaOfSpecializationModel>(DOC => DOC.codigo.Equals(areaOfSpecializationModel.codigo), Builders<AreaOfSpecializationModel>.Update.Combine(updateDefinitions));
         return result.ModifiedCount > 0;
+    }
+
+    public List<AreaOfSpecializationModel> getAreasOfSpecializationByQuery(int skip, int take, string query) {
+        try {
+            dynamic? queryObject = JsonConvert.DeserializeObject<dynamic>(query);
+            if (queryObject == null) {
+                throw new Exception();
+            }
+            queryObject["dataController.active"] = true;
+
+            string finalQueryString = JsonConvert.SerializeObject(queryObject);
+
+            return collection.Find<AreaOfSpecializationModel>(finalQueryString).Skip(skip).Limit(take).ToList<AreaOfSpecializationModel>();
+        } catch (Exception) {
+            return new List<AreaOfSpecializationModel>();
+        }
+    }
+
+    public long count(string query) {
+        dynamic? queryObject = JsonConvert.DeserializeObject<dynamic>(query);
+        if (queryObject == null) {
+            return 0;
+        }
+        queryObject["dataController.active"] = true;
+        string finalQueryString = JsonConvert.SerializeObject(queryObject);
+
+        return collection.Find(finalQueryString).CountDocuments();
     }
 }
 
