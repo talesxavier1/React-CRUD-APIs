@@ -33,7 +33,7 @@ public class AreaOfSpecializationController : Controller {
 
     [HttpGet]
     [Route("countAreaOfSpecialization")]
-    public ActionResult<OperationResponseModel> countAreaOfSpecialization([FromHeader] string userToken, [FromQuery] string? query) {
+    public ActionResult<OperationResponseModel> countAreaOfSpecialization([FromHeader] string userToken) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -42,13 +42,25 @@ public class AreaOfSpecializationController : Controller {
             return StatusCode(401, response);
         }
 
-        long result;
-        if (query != null) {
-            result = new AreaOfSpecializationRepository().count(query);
-        } else {
-            result = new AreaOfSpecializationRepository().count();
+        long result = new AreaOfSpecializationRepository().count();
+        response.data = result;
+        response.oparationStatus = Status.OK;
+
+        return Ok(response);
+    }
+
+    [HttpPost]
+    [Route("countAreaOfSpecializationByQuery")]
+    public ActionResult<OperationResponseModel> countAreaOfSpecializationByQuery([FromHeader] string userToken, [FromBody] string query) {
+        OperationResponseModel response = new();
+
+        if (!new UserRepository().validateToken(userToken)) {
+            response.oparationStatus = Status.NOK;
+            response.message = "userToken Inválido.";
+            return StatusCode(401, response);
         }
 
+        long result = new AreaOfSpecializationRepository().count(query);
         response.data = result;
         response.oparationStatus = Status.OK;
 
@@ -74,7 +86,7 @@ public class AreaOfSpecializationController : Controller {
 
     [HttpGet]
     [Route("getAreasOfSpecialization")]
-    public ActionResult<OperationResponseModel> getAreasOfSpecialization([FromHeader] string userToken, [FromQuery] int skip, [FromQuery] int take, [FromQuery] string? query) {
+    public ActionResult<OperationResponseModel> getAreasOfSpecialization([FromHeader] string userToken, [FromQuery] int skip, [FromQuery] int take) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -83,17 +95,29 @@ public class AreaOfSpecializationController : Controller {
             return StatusCode(401, response);
         }
 
-        List<AreaOfSpecializationModel> result;
-        if (query != null) {
-            result = new AreaOfSpecializationRepository().getAreasOfSpecializationByQuery(skip, take, query);
-        } else {
-            result = new AreaOfSpecializationRepository().getAreasOfSpecialization(skip, take);
-        }
-
+        List<AreaOfSpecializationModel> result = new AreaOfSpecializationRepository().getAreasOfSpecialization(skip, take);
         response.data = result;
         response.oparationStatus = Status.OK;
         return Ok(response);
     }
+
+    [HttpPost]
+    [Route("getAreasOfSpecializationByQuery")]
+    public ActionResult<OperationResponseModel> getAreasOfSpecializationByQuery([FromHeader] string userToken, [FromQuery] int skip, [FromQuery] int take, [FromBody] string query) {
+        OperationResponseModel response = new();
+
+        if (!new UserRepository().validateToken(userToken)) {
+            response.oparationStatus = Status.NOK;
+            response.message = "userToken Inválido.";
+            return StatusCode(401, response);
+        }
+
+        List<AreaOfSpecializationModel> result = new AreaOfSpecializationRepository().getAreasOfSpecialization(skip, take, query);
+        response.data = result;
+        response.oparationStatus = Status.OK;
+        return Ok(response);
+    }
+
 
     [HttpPost]
     [Route("logicalDeleteAreaOfSpecialization")]

@@ -5,7 +5,7 @@ public interface IPositionRepository {
 
     public Boolean addPosition(PositionModel positionsModel, UserModel user);
     public List<PositionModel> getPositions(int skip, int take);
-    public List<PositionModel> getPositionsByQuery(int skip, int take, String query);
+    public List<PositionModel> getPositions(int skip, int take, String query);
     public PositionModel getPositionById(string codigo);
     public Boolean updatePosition(PositionModel positionsModel, UserModel User);
     public Boolean deletePosition(String codigo);

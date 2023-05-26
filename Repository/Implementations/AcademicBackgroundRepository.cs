@@ -59,7 +59,7 @@ public class AcademicBackgroundRepository : IAcademicBackgroundRepository {
         return collection.Find(DOC => (DOC.dataController.active == true)).Skip(skip).Limit(take).ToList();
     }
 
-    public List<AcademicBackgroundModel> getAcademicBackgroundsByQuery(int skip, int take, string query) {
+    public List<AcademicBackgroundModel> getAcademicBackgrounds(int skip, int take, string query) {
         try {
             dynamic? queryObject = JsonConvert.DeserializeObject<dynamic>(query);
             if (queryObject == null) {

@@ -33,7 +33,7 @@ public class PositionController : Controller {
 
     [HttpGet]
     [Route("countPositions")]
-    public ActionResult<OperationResponseModel> countPositions([FromHeader] string userToken, [FromQuery] string? query) {
+    public ActionResult<OperationResponseModel> countPositions([FromHeader] string userToken) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -42,13 +42,25 @@ public class PositionController : Controller {
             return StatusCode(401, response);
         }
 
-        long result;
-        if (query != null) {
-            result = new PositionRepository().count(query);
-        } else {
-            result = new PositionRepository().count();
+        long result = new PositionRepository().count();
+        response.data = result;
+        response.oparationStatus = Status.OK;
+
+        return Ok(response);
+    }
+
+    [HttpPost]
+    [Route("countPositionsByQuery")]
+    public ActionResult<OperationResponseModel> countPositionsByQuery([FromHeader] string userToken, [FromBody] string query) {
+        OperationResponseModel response = new();
+
+        if (!new UserRepository().validateToken(userToken)) {
+            response.oparationStatus = Status.NOK;
+            response.message = "userToken Inválido.";
+            return StatusCode(401, response);
         }
 
+        long result = new PositionRepository().count(query);
         response.data = result;
         response.oparationStatus = Status.OK;
 
@@ -84,6 +96,23 @@ public class PositionController : Controller {
         }
 
         var result = new PositionRepository().getPositions(skip, take);
+        response.data = result;
+        response.oparationStatus = Status.OK;
+        return Ok(response);
+    }
+
+    [HttpPost]
+    [Route("getPositionsByQuery")]
+    public ActionResult<OperationResponseModel> getPositionsByQuery([FromHeader] string userToken, [FromQuery] int skip, [FromQuery] int take, [FromBody] string query) {
+        OperationResponseModel response = new();
+
+        if (!new UserRepository().validateToken(userToken)) {
+            response.oparationStatus = Status.NOK;
+            response.message = "userToken Inválido.";
+            return StatusCode(401, response);
+        }
+
+        var result = new PositionRepository().getPositions(skip, take, query);
         response.data = result;
         response.oparationStatus = Status.OK;
         return Ok(response);

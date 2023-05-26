@@ -33,7 +33,7 @@ public class AcademicBackgroundController : Controller {
 
     [HttpGet]
     [Route("countAcademicBackgrounds")]
-    public ActionResult<OperationResponseModel> countAcademicBackgrounds([FromHeader] string userToken, [FromQuery] string? query) {
+    public ActionResult<OperationResponseModel> countAcademicBackgrounds([FromHeader] string userToken) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -42,13 +42,25 @@ public class AcademicBackgroundController : Controller {
             return StatusCode(401, response);
         }
 
-        long result;
-        if (query != null) {
-            result = new AcademicBackgroundRepository().count(query);
-        } else {
-            result = new AcademicBackgroundRepository().count();
+        long result = new AcademicBackgroundRepository().count();
+        response.data = result;
+        response.oparationStatus = Status.OK;
+
+        return Ok(response);
+    }
+
+    [HttpPost]
+    [Route("countAcademicBackgroundsByQuery")]
+    public ActionResult<OperationResponseModel> countAcademicBackgroundsByQuery([FromHeader] string userToken, [FromBody] string query) {
+        OperationResponseModel response = new();
+
+        if (!new UserRepository().validateToken(userToken)) {
+            response.oparationStatus = Status.NOK;
+            response.message = "userToken Inválido.";
+            return StatusCode(401, response);
         }
 
+        long result = new AcademicBackgroundRepository().count(query);
         response.data = result;
         response.oparationStatus = Status.OK;
 
@@ -74,7 +86,7 @@ public class AcademicBackgroundController : Controller {
 
     [HttpGet]
     [Route("getAcademicBackgrounds")]
-    public ActionResult<OperationResponseModel> getAcademicBackgrounds([FromHeader] string userToken, [FromQuery] int skip, [FromQuery] int take, [FromQuery] string? query) {
+    public ActionResult<OperationResponseModel> getAcademicBackgrounds([FromHeader] string userToken, [FromQuery] int skip, [FromQuery] int take) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -83,13 +95,24 @@ public class AcademicBackgroundController : Controller {
             return StatusCode(401, response);
         }
 
-        List<AcademicBackgroundModel> result;
-        if (query != null) {
-            result = new AcademicBackgroundRepository().getAcademicBackgroundsByQuery(skip, take, query);
-        } else {
-            result = new AcademicBackgroundRepository().getAcademicBackgrounds(skip, take);
+        List<AcademicBackgroundModel> result = new AcademicBackgroundRepository().getAcademicBackgrounds(skip, take);
+        response.data = result;
+        response.oparationStatus = Status.OK;
+        return Ok(response);
+    }
+
+    [HttpPost]
+    [Route("getAcademicBackgroundsByQuery")]
+    public ActionResult<OperationResponseModel> getAcademicBackgroundsByQuery([FromHeader] string userToken, [FromQuery] int skip, [FromQuery] int take, [FromBody] string query) {
+        OperationResponseModel response = new();
+
+        if (!new UserRepository().validateToken(userToken)) {
+            response.oparationStatus = Status.NOK;
+            response.message = "userToken Inválido.";
+            return StatusCode(401, response);
         }
 
+        List<AcademicBackgroundModel> result = new AcademicBackgroundRepository().getAcademicBackgrounds(skip, take, query);
         response.data = result;
         response.oparationStatus = Status.OK;
         return Ok(response);
