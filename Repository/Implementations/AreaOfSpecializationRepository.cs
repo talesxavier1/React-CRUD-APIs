@@ -48,6 +48,22 @@ public class AreaOfSpecializationRepository : IAreaOfSpecializationRepository {
         return collection.Find(DOC => (DOC.dataController.active == true)).Skip(skip).Limit(take).ToList();
     }
 
+    public List<AreaOfSpecializationModel> getAreasOfSpecialization(int skip, int take, string query) {
+        try {
+            dynamic? queryObject = JsonConvert.DeserializeObject<dynamic>(query);
+            if (queryObject == null) {
+                throw new Exception();
+            }
+            queryObject["dataController.active"] = true;
+
+            string finalQueryString = JsonConvert.SerializeObject(queryObject);
+
+            return collection.Find<AreaOfSpecializationModel>(finalQueryString).Skip(skip).Limit(take).ToList<AreaOfSpecializationModel>();
+        } catch (Exception) {
+            return new List<AreaOfSpecializationModel>();
+        }
+    }
+
     public bool logicalDeleteAreaOfSpecialization(string[] codigos, UserModel user) {
         List<UpdateDefinition<AreaOfSpecializationModel>> updates = new() {
             Builders<AreaOfSpecializationModel>.Update.Set("dataController.active", false),
@@ -76,22 +92,6 @@ public class AreaOfSpecializationRepository : IAreaOfSpecializationRepository {
 
         UpdateResult result = collection.UpdateOne<AreaOfSpecializationModel>(DOC => DOC.codigo.Equals(areaOfSpecializationModel.codigo), Builders<AreaOfSpecializationModel>.Update.Combine(updateDefinitions));
         return result.ModifiedCount > 0;
-    }
-
-    public List<AreaOfSpecializationModel> getAreasOfSpecializationByQuery(int skip, int take, string query) {
-        try {
-            dynamic? queryObject = JsonConvert.DeserializeObject<dynamic>(query);
-            if (queryObject == null) {
-                throw new Exception();
-            }
-            queryObject["dataController.active"] = true;
-
-            string finalQueryString = JsonConvert.SerializeObject(queryObject);
-
-            return collection.Find<AreaOfSpecializationModel>(finalQueryString).Skip(skip).Limit(take).ToList<AreaOfSpecializationModel>();
-        } catch (Exception) {
-            return new List<AreaOfSpecializationModel>();
-        }
     }
 
     public long count(string query) {

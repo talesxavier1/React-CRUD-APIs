@@ -59,7 +59,7 @@ public class PositionRepository : IPositionRepository {
         return collection.Find(DOC => (DOC.dataController.active == true)).Skip(skip).Limit(take).ToList();
     }
 
-    public List<PositionModel> getPositionsByQuery(int skip, int take, string query) {
+    public List<PositionModel> getPositions(int skip, int take, string query) {
         try {
             dynamic? queryObject = JsonConvert.DeserializeObject<dynamic>(query);
             if (queryObject == null) {
