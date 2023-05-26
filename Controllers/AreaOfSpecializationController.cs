@@ -60,11 +60,19 @@ public class AreaOfSpecializationController : Controller {
             return StatusCode(401, response);
         }
 
-        long result = new AreaOfSpecializationRepository().count(query);
-        response.data = result;
-        response.oparationStatus = Status.OK;
+        try {
+            byte[] valueBytes = System.Convert.FromBase64String(query);
+            string stringFilter = System.Text.Encoding.UTF8.GetString(valueBytes);
 
-        return Ok(response);
+            long result = new AreaOfSpecializationRepository().count(stringFilter);
+            response.data = result;
+            response.oparationStatus = Status.OK;
+            return Ok(response);
+        } catch (Exception e) {
+            response.oparationStatus = Status.NOK;
+            response.message = e.ToString();
+            return StatusCode(500, response);
+        }
     }
 
     [HttpGet]
@@ -112,10 +120,19 @@ public class AreaOfSpecializationController : Controller {
             return StatusCode(401, response);
         }
 
-        List<AreaOfSpecializationModel> result = new AreaOfSpecializationRepository().getAreasOfSpecialization(skip, take, query);
-        response.data = result;
-        response.oparationStatus = Status.OK;
-        return Ok(response);
+        try {
+            byte[] valueBytes = System.Convert.FromBase64String(query);
+            string stringFilter = System.Text.Encoding.UTF8.GetString(valueBytes);
+
+            List<AreaOfSpecializationModel> result = new AreaOfSpecializationRepository().getAreasOfSpecialization(skip, take, stringFilter);
+            response.data = result;
+            response.oparationStatus = Status.OK;
+            return Ok(response);
+        } catch (Exception e) {
+            response.oparationStatus = Status.NOK;
+            response.message = e.ToString();
+            return StatusCode(500, response);
+        }
     }
 
 
