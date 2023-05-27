@@ -59,12 +59,20 @@ public class PositionController : Controller {
             response.message = "userToken Inválido.";
             return StatusCode(401, response);
         }
+        try {
+            byte[] valueBytes = System.Convert.FromBase64String(query);
+            string stringFilter = System.Text.Encoding.UTF8.GetString(valueBytes);
 
-        long result = new PositionRepository().count(query);
-        response.data = result;
-        response.oparationStatus = Status.OK;
+            long result = new PositionRepository().count(stringFilter);
+            response.data = result;
+            response.oparationStatus = Status.OK;
 
-        return Ok(response);
+            return Ok(response);
+        } catch (Exception e) {
+            response.oparationStatus = Status.NOK;
+            response.message = e.ToString();
+            return StatusCode(500, response);
+        }
     }
 
     [HttpGet]
@@ -112,10 +120,19 @@ public class PositionController : Controller {
             return StatusCode(401, response);
         }
 
-        var result = new PositionRepository().getPositions(skip, take, query);
-        response.data = result;
-        response.oparationStatus = Status.OK;
-        return Ok(response);
+        try {
+            byte[] valueBytes = System.Convert.FromBase64String(query);
+            string stringFilter = System.Text.Encoding.UTF8.GetString(valueBytes);
+
+            var result = new PositionRepository().getPositions(skip, take, stringFilter);
+            response.data = result;
+            response.oparationStatus = Status.OK;
+            return Ok(response);
+        } catch (Exception e) {
+            response.oparationStatus = Status.NOK;
+            response.message = e.ToString();
+            return StatusCode(500, response);
+        }
     }
 
     [HttpPost]
