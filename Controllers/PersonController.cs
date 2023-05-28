@@ -33,7 +33,7 @@ public class PersonCOntroller : Controller {
 
     [HttpPost]
     [Route("addPerson")]
-    public ActionResult<OperationResponseModel> addPerosn([FromHeader] String userToken, PersonModel person) {
+    public ActionResult<OperationResponseModel> addPerosn([FromHeader] String userToken, [FromBody] PersonModel person) {
         OperationResponseModel response = new();
         UserRepository userRepository = new();
 
@@ -56,7 +56,7 @@ public class PersonCOntroller : Controller {
 
     [HttpPost]
     [Route("modifyPerson")]
-    public ActionResult<OperationResponseModel> modifyPerson([FromHeader] String userToken, PersonModel person) {
+    public ActionResult<OperationResponseModel> modifyPerson([FromHeader] String userToken, [FromBody] PersonModel person) {
         OperationResponseModel response = new();
         UserRepository userRepository = new();
 

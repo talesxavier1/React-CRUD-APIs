@@ -12,7 +12,7 @@ public class AreaOfSpecializationController : Controller {
 
     [HttpPost]
     [Route("addAreaOfSpecialization")]
-    public ActionResult<OperationResponseModel> addAreaOfSpecialization([FromHeader] string userToken, AreaOfSpecializationModel areaOfSpecializationModel) {
+    public ActionResult<OperationResponseModel> addAreaOfSpecialization([FromHeader] string userToken, [FromBody] AreaOfSpecializationModel areaOfSpecializationModel) {
         UserRepository userRepository = new();
         OperationResponseModel response = new();
 

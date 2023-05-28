@@ -12,7 +12,7 @@ public class AcademicBackgroundController : Controller {
 
     [HttpPost]
     [Route("addAcademicBackground")]
-    public ActionResult<OperationResponseModel> addAcademicBackground([FromHeader] string userToken, AcademicBackgroundModel academicBackgroundModel) {
+    public ActionResult<OperationResponseModel> addAcademicBackground([FromHeader] string userToken, [FromBody] AcademicBackgroundModel academicBackgroundModel) {
         UserRepository userRepository = new();
         OperationResponseModel response = new();
 
@@ -156,7 +156,7 @@ public class AcademicBackgroundController : Controller {
 
     [HttpPost]
     [Route("modifyAcademicBackground")]
-    public ActionResult<OperationResponseModel> modifyAcademicBackground([FromHeader] string userToken, AcademicBackgroundModel academicBackgroundModel) {
+    public ActionResult<OperationResponseModel> modifyAcademicBackground([FromHeader] string userToken, [FromBody] AcademicBackgroundModel academicBackgroundModel) {
         UserRepository userRepository = new();
         OperationResponseModel response = new();
 

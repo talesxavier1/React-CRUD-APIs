@@ -29,7 +29,7 @@ public class ContactPersonController : Controller {
 
     [HttpPost]
     [Route("addContact")]
-    public ActionResult<OperationResponseModel> addAddress([FromHeader] string userToken, ContactModel contact) {
+    public ActionResult<OperationResponseModel> addAddress([FromHeader] string userToken, [FromBody] ContactModel contact) {
         UserRepository userRepository = new();
         OperationResponseModel response = new();
 
@@ -84,7 +84,7 @@ public class ContactPersonController : Controller {
 
     [HttpPost]
     [Route("modifyContact")]
-    public ActionResult<OperationResponseModel> modifyContact([FromHeader] string userToken, ContactModel contact) {
+    public ActionResult<OperationResponseModel> modifyContact([FromHeader] string userToken, [FromBody] ContactModel contact) {
         UserRepository userRepository = new();
         OperationResponseModel response = new();
 

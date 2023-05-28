@@ -12,7 +12,7 @@ public class PositionController : Controller {
 
     [HttpPost]
     [Route("addPosition")]
-    public ActionResult<OperationResponseModel> addPosition([FromHeader] string userToken, PositionModel positionModel) {
+    public ActionResult<OperationResponseModel> addPosition([FromHeader] string userToken, [FromBody] PositionModel positionModel) {
         UserRepository userRepository = new();
         OperationResponseModel response = new();
 
@@ -156,7 +156,7 @@ public class PositionController : Controller {
 
     [HttpPost]
     [Route("modifyPosition")]
-    public ActionResult<OperationResponseModel> modifyPosition([FromHeader] string userToken, PositionModel positionModel) {
+    public ActionResult<OperationResponseModel> modifyPosition([FromHeader] string userToken, [FromBody] PositionModel positionModel) {
         UserRepository userRepository = new();
         OperationResponseModel response = new();
 

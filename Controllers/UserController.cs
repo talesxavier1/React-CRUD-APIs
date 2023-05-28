@@ -67,7 +67,7 @@ public class UserController : ControllerBase {
 
     [HttpPost]
     [Route("CreateUser")]
-    public ActionResult<CreateUserResponseModel> createUser([FromHeader] string userToken, UserModel userModel) {
+    public ActionResult<CreateUserResponseModel> createUser([FromHeader] string userToken, [FromBody] UserModel userModel) {
         CreateUserResponseModel userResponse = new();
 
         UserRepository userRepository = new();
