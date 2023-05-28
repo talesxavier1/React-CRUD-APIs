@@ -103,7 +103,7 @@ public class PersonCOntroller : Controller {
 
         try {
             byte[] valueBytes = System.Convert.FromBase64String(queryB64);
-            string stringFilter = System.Text.Encoding.UTF8.GetString(valueBytes);
+            string stringFilter = Uri.UnescapeDataString(System.Text.Encoding.UTF8.GetString(valueBytes));
 
             response.data = new PersonRepository().getPersonsByStringQuery(stringFilter, skip, take);
             response.oparationStatus = Status.OK;
@@ -130,7 +130,8 @@ public class PersonCOntroller : Controller {
 
         try {
             byte[] valueBytes = System.Convert.FromBase64String(queryB64);
-            string stringFilter = System.Text.Encoding.UTF8.GetString(valueBytes);
+            string stringFilter = Uri.UnescapeDataString(System.Text.Encoding.UTF8.GetString(valueBytes));
+
             response.data = new PersonRepository().countPersons(stringFilter);
             response.oparationStatus = Status.OK;
 
