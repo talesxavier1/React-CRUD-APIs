@@ -62,7 +62,7 @@ public class AcademicBackgroundController : Controller {
 
         try {
             byte[] valueBytes = System.Convert.FromBase64String(query);
-            string stringFilter = System.Text.Encoding.UTF8.GetString(valueBytes);
+            string stringFilter = Uri.UnescapeDataString(System.Text.Encoding.UTF8.GetString(valueBytes));
 
             long result = new AcademicBackgroundRepository().count(stringFilter);
             response.data = result;
@@ -122,7 +122,7 @@ public class AcademicBackgroundController : Controller {
 
         try {
             byte[] valueBytes = System.Convert.FromBase64String(query);
-            string stringFilter = System.Text.Encoding.UTF8.GetString(valueBytes);
+            string stringFilter = Uri.UnescapeDataString(System.Text.Encoding.UTF8.GetString(valueBytes));
 
             List<AcademicBackgroundModel> result = new AcademicBackgroundRepository().getAcademicBackgrounds(skip, take, stringFilter);
             response.data = result;
