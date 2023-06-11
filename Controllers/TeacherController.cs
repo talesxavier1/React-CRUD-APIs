@@ -67,7 +67,7 @@ public class TeacherController : Controller {
         }
         UserModel user = userRepository.getUserByToken(userToken);
 
-        new TeacherRepository().addTeacher(teacher, user);
+        new TeacherRepository().updateTeacher(teacher, user);
         return StatusCode(200, response);
     }
 
