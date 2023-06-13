@@ -12,7 +12,7 @@ public class PositionController : Controller {
 
     [HttpPost]
     [Route("addPosition")]
-    public ActionResult<OperationResponseModel> addPosition([FromHeader] string userToken, PositionModel positionModel) {
+    public ActionResult<OperationResponseModel> addPosition([FromHeader] string userToken, [FromBody] PositionModel positionModel) {
         UserRepository userRepository = new();
         OperationResponseModel response = new();
 
@@ -61,7 +61,7 @@ public class PositionController : Controller {
         }
         try {
             byte[] valueBytes = System.Convert.FromBase64String(query);
-            string stringFilter = System.Text.Encoding.UTF8.GetString(valueBytes);
+            string stringFilter = Uri.UnescapeDataString(System.Text.Encoding.UTF8.GetString(valueBytes));
 
             long result = new PositionRepository().count(stringFilter);
             response.data = result;
@@ -122,7 +122,7 @@ public class PositionController : Controller {
 
         try {
             byte[] valueBytes = System.Convert.FromBase64String(query);
-            string stringFilter = System.Text.Encoding.UTF8.GetString(valueBytes);
+            string stringFilter = Uri.UnescapeDataString(System.Text.Encoding.UTF8.GetString(valueBytes));
 
             var result = new PositionRepository().getPositions(skip, take, stringFilter);
             response.data = result;
@@ -156,7 +156,7 @@ public class PositionController : Controller {
 
     [HttpPost]
     [Route("modifyPosition")]
-    public ActionResult<OperationResponseModel> modifyPosition([FromHeader] string userToken, PositionModel positionModel) {
+    public ActionResult<OperationResponseModel> modifyPosition([FromHeader] string userToken, [FromBody] PositionModel positionModel) {
         UserRepository userRepository = new();
         OperationResponseModel response = new();
 

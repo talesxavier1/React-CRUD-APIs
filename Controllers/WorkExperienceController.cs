@@ -7,12 +7,12 @@ using SingularChatAPIs.ResponseModels.ENUMs;
 namespace SingularChatAPIs.Controllers;
 
 [ApiController]
-[Route("Person")]
-public class PersonCOntroller : Controller {
+[Route("WorkExperience")]
+public class WorkExperienceController : Controller {
 
     [HttpPost]
-    [Route("logicalDeletePerson")]
-    public ActionResult<OperationResponseModel> logicalDeletePerson([FromHeader] String userToken, [FromQuery] string codigo) {
+    [Route("logicalDeleteWorkEperience")]
+    public ActionResult<OperationResponseModel> logicalDeleteWorkEperience([FromHeader] String userToken, [FromQuery] string codigo) {
 
         OperationResponseModel response = new();
         UserRepository userRepository = new();
@@ -24,7 +24,7 @@ public class PersonCOntroller : Controller {
         }
         UserModel user = userRepository.getUserByToken(userToken);
 
-        Boolean operationResult = new PersonRepository().logicalDeletePerson(codigo, user);
+        Boolean operationResult = new WorkExperienceRepository().logicalDeleteWorkExperience(codigo, user);
 
         response.oparationStatus = operationResult ? Status.OK : Status.NOK;
 
@@ -32,8 +32,8 @@ public class PersonCOntroller : Controller {
     }
 
     [HttpPost]
-    [Route("addPerson")]
-    public ActionResult<OperationResponseModel> addPerosn([FromHeader] String userToken, [FromBody] PersonModel person) {
+    [Route("addWorkExperience")]
+    public ActionResult<OperationResponseModel> addWorkExperience([FromHeader] String userToken, WorkExperienceModel workExperience) {
         OperationResponseModel response = new();
         UserRepository userRepository = new();
 
@@ -45,18 +45,18 @@ public class PersonCOntroller : Controller {
 
         UserModel user = userRepository.getUserByToken(userToken);
 
-        Boolean operationResult = new PersonRepository().addPerson(person, user);
+        Boolean operationResult = new WorkExperienceRepository().addExperience(workExperience, user);
 
         response.oparationStatus = operationResult ? Status.OK : Status.NOK;
-        response.message = operationResult ? "Usuário Criado." : "Não foi possível criar usuário.";
-        response.data = person;
+        response.message = operationResult ? "Registro Criado." : "Não foi possível criar registro.";
+        response.data = workExperience;
 
         return StatusCode(200, response);
     }
 
     [HttpPost]
-    [Route("modifyPerson")]
-    public ActionResult<OperationResponseModel> modifyPerson([FromHeader] String userToken, [FromBody] PersonModel person) {
+    [Route("modifyWorkExperience")]
+    public ActionResult<OperationResponseModel> modifyWorkExperience([FromHeader] String userToken, WorkExperienceModel workExperience) {
         OperationResponseModel response = new();
         UserRepository userRepository = new();
 
@@ -67,13 +67,16 @@ public class PersonCOntroller : Controller {
         }
         UserModel user = userRepository.getUserByToken(userToken);
 
-        new PersonRepository().updatePerson(person, user);
+        bool result = new WorkExperienceRepository().updateWorkExperience(workExperience, user);
+        response.oparationStatus = result == true ? Status.OK : Status.NOK;
+        response.message = result == true ? "Registro Atualizado." : "Não foi posível atualizar o registro.";
+
         return StatusCode(200, response);
     }
 
     [HttpGet]
-    [Route("getPersonList")]
-    public ActionResult<OperationResponseModel> getPersonList([FromHeader] String userToken, [FromQuery] int skip, int take) {
+    [Route("getWorkExperienceList")]
+    public ActionResult<OperationResponseModel> getWorkExperienceList([FromHeader] String userToken, [FromQuery] int skip, [FromQuery] int take, [FromQuery] string? codigoRef) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -82,7 +85,7 @@ public class PersonCOntroller : Controller {
             return StatusCode(401, response);
         }
 
-        List<PersonModel> result = new PersonRepository().getPersonList(skip, take);
+        List<WorkExperienceModel> result = new WorkExperienceRepository().getWorkExperienceList(skip, take, codigoRef);
         response.oparationStatus = Status.OK;
         response.message = "";
         response.data = result;
@@ -91,8 +94,8 @@ public class PersonCOntroller : Controller {
     }
 
     [HttpPost]
-    [Route("getPersonsByStringQuery")]
-    public ActionResult<OperationResponseModel> getPersonsByStringQuery([FromHeader] String userToken, [FromBody] string queryB64, [FromQuery] int skip, [FromQuery] int take) {
+    [Route("getWorkExperienceByStringQuery")]
+    public ActionResult<OperationResponseModel> getWorkExperienceByStringQuery([FromHeader] String userToken, [FromBody] string queryB64, [FromQuery] int skip, [FromQuery] int take, [FromQuery] string? codigoRef) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -105,7 +108,7 @@ public class PersonCOntroller : Controller {
             byte[] valueBytes = System.Convert.FromBase64String(queryB64);
             string stringFilter = Uri.UnescapeDataString(System.Text.Encoding.UTF8.GetString(valueBytes));
 
-            response.data = new PersonRepository().getPersonsByStringQuery(stringFilter, skip, take);
+            response.data = new WorkExperienceRepository().getWorkExperienceByStringQuery(stringFilter, skip, take, codigoRef);
             response.oparationStatus = Status.OK;
 
             return StatusCode(200, response);
@@ -118,8 +121,8 @@ public class PersonCOntroller : Controller {
     }
 
     [HttpPost]
-    [Route("countPersonsByQuery")]
-    public ActionResult<OperationResponseModel> countPersons([FromHeader] String userToken, [FromBody] string queryB64) {
+    [Route("countWorkExperiencesByQuery")]
+    public ActionResult<OperationResponseModel> countWorkExperiencesByQuery([FromHeader] String userToken, [FromBody] string queryB64) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -132,7 +135,7 @@ public class PersonCOntroller : Controller {
             byte[] valueBytes = System.Convert.FromBase64String(queryB64);
             string stringFilter = Uri.UnescapeDataString(System.Text.Encoding.UTF8.GetString(valueBytes));
 
-            response.data = new PersonRepository().countPersons(stringFilter);
+            response.data = new WorkExperienceRepository().countWorkExperiencesByQuery(stringFilter);
             response.oparationStatus = Status.OK;
 
             return StatusCode(200, response);
@@ -143,10 +146,9 @@ public class PersonCOntroller : Controller {
         }
     }
 
-
     [HttpGet]
-    [Route("countPersons")]
-    public ActionResult<OperationResponseModel> countPersons([FromHeader] String userToken) {
+    [Route("countWorkExperiences")]
+    public ActionResult<OperationResponseModel> countWorkExperiences([FromHeader] String userToken, [FromQuery] string? codigoRef) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -154,15 +156,15 @@ public class PersonCOntroller : Controller {
             response.message = "userToken Inválido.";
             return StatusCode(401, response);
         }
-        long result = new PersonRepository().countPersons();
+        long result = new WorkExperienceRepository().countWorkExperiences(codigoRef);
         response.oparationStatus = Status.OK;
         response.data = result;
         return Ok(response);
     }
 
     [HttpGet]
-    [Route("getPersonById")]
-    public ActionResult<OperationResponseModel> getPersonById([FromHeader] String userToken, [FromQuery] string codigo) {
+    [Route("getWorkExperienceById")]
+    public ActionResult<OperationResponseModel> getWorkExperienceById([FromHeader] String userToken, [FromQuery] string codigo) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -171,11 +173,10 @@ public class PersonCOntroller : Controller {
             return StatusCode(401, response);
         }
 
-        PersonModel result = new PersonRepository().getPersonById(codigo);
+        WorkExperienceModel result = new WorkExperienceRepository().getWorkExperienceById(codigo);
         response.oparationStatus = Status.OK;
         response.data = result;
 
         return StatusCode(200, response);
     }
-
 }

@@ -40,7 +40,6 @@ public class PersonRepository : IPersonRepository {
 
     public Boolean deletePerson(string codigo) {
         try {
-            //Olhar esse DeleteResult
             DeleteResult result = collection.DeleteOne<PersonModel>(DOC => DOC.codigo == codigo);
             return true;
         } catch (Exception) {

@@ -7,12 +7,12 @@ using SingularChatAPIs.ResponseModels.ENUMs;
 namespace SingularChatAPIs.Controllers;
 
 [ApiController]
-[Route("Person")]
-public class PersonCOntroller : Controller {
+[Route("Teacher")]
+public class TeacherController : Controller {
 
     [HttpPost]
-    [Route("logicalDeletePerson")]
-    public ActionResult<OperationResponseModel> logicalDeletePerson([FromHeader] String userToken, [FromQuery] string codigo) {
+    [Route("logicalDeleteTeacher")]
+    public ActionResult<OperationResponseModel> logicalDeleteTeacher([FromHeader] String userToken, [FromQuery] string codigo) {
 
         OperationResponseModel response = new();
         UserRepository userRepository = new();
@@ -24,7 +24,7 @@ public class PersonCOntroller : Controller {
         }
         UserModel user = userRepository.getUserByToken(userToken);
 
-        Boolean operationResult = new PersonRepository().logicalDeletePerson(codigo, user);
+        Boolean operationResult = new TeacherRepository().logicalDeleteTeacher(codigo, user);
 
         response.oparationStatus = operationResult ? Status.OK : Status.NOK;
 
@@ -32,8 +32,8 @@ public class PersonCOntroller : Controller {
     }
 
     [HttpPost]
-    [Route("addPerson")]
-    public ActionResult<OperationResponseModel> addPerosn([FromHeader] String userToken, [FromBody] PersonModel person) {
+    [Route("addTeacher")]
+    public ActionResult<OperationResponseModel> addTeacher([FromHeader] String userToken, [FromBody] TeacherModel teacher) {
         OperationResponseModel response = new();
         UserRepository userRepository = new();
 
@@ -45,18 +45,18 @@ public class PersonCOntroller : Controller {
 
         UserModel user = userRepository.getUserByToken(userToken);
 
-        Boolean operationResult = new PersonRepository().addPerson(person, user);
+        Boolean operationResult = new TeacherRepository().addTeacher(teacher, user);
 
         response.oparationStatus = operationResult ? Status.OK : Status.NOK;
-        response.message = operationResult ? "Usuário Criado." : "Não foi possível criar usuário.";
-        response.data = person;
+        response.message = operationResult ? "Registro Criado." : "Não foi possível criar registro.";
+        response.data = teacher;
 
         return StatusCode(200, response);
     }
 
     [HttpPost]
-    [Route("modifyPerson")]
-    public ActionResult<OperationResponseModel> modifyPerson([FromHeader] String userToken, [FromBody] PersonModel person) {
+    [Route("modifyTeacher")]
+    public ActionResult<OperationResponseModel> modifyTeacher([FromHeader] String userToken, [FromBody] TeacherModel teacher) {
         OperationResponseModel response = new();
         UserRepository userRepository = new();
 
@@ -67,13 +67,13 @@ public class PersonCOntroller : Controller {
         }
         UserModel user = userRepository.getUserByToken(userToken);
 
-        new PersonRepository().updatePerson(person, user);
+        new TeacherRepository().updateTeacher(teacher, user);
         return StatusCode(200, response);
     }
 
     [HttpGet]
-    [Route("getPersonList")]
-    public ActionResult<OperationResponseModel> getPersonList([FromHeader] String userToken, [FromQuery] int skip, int take) {
+    [Route("getTeacherList")]
+    public ActionResult<OperationResponseModel> getTeacherList([FromHeader] String userToken, [FromQuery] int skip, int take) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -82,7 +82,7 @@ public class PersonCOntroller : Controller {
             return StatusCode(401, response);
         }
 
-        List<PersonModel> result = new PersonRepository().getPersonList(skip, take);
+        List<TeacherModel> result = new TeacherRepository().getTeacherList(skip, take);
         response.oparationStatus = Status.OK;
         response.message = "";
         response.data = result;
@@ -91,8 +91,8 @@ public class PersonCOntroller : Controller {
     }
 
     [HttpPost]
-    [Route("getPersonsByStringQuery")]
-    public ActionResult<OperationResponseModel> getPersonsByStringQuery([FromHeader] String userToken, [FromBody] string queryB64, [FromQuery] int skip, [FromQuery] int take) {
+    [Route("getTeacherByQuery")]
+    public ActionResult<OperationResponseModel> getTeacherByQuery([FromHeader] String userToken, [FromBody] string queryB64, [FromQuery] int skip, [FromQuery] int take) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -105,7 +105,7 @@ public class PersonCOntroller : Controller {
             byte[] valueBytes = System.Convert.FromBase64String(queryB64);
             string stringFilter = Uri.UnescapeDataString(System.Text.Encoding.UTF8.GetString(valueBytes));
 
-            response.data = new PersonRepository().getPersonsByStringQuery(stringFilter, skip, take);
+            response.data = new TeacherRepository().getTeacherByStringQuery(stringFilter, skip, take);
             response.oparationStatus = Status.OK;
 
             return StatusCode(200, response);
@@ -114,12 +114,11 @@ public class PersonCOntroller : Controller {
             response.message = e.ToString();
             return StatusCode(500, response);
         }
-
     }
 
     [HttpPost]
-    [Route("countPersonsByQuery")]
-    public ActionResult<OperationResponseModel> countPersons([FromHeader] String userToken, [FromBody] string queryB64) {
+    [Route("countTeachersByQuery")]
+    public ActionResult<OperationResponseModel> countTeachersByQuery([FromHeader] String userToken, [FromBody] string queryB64) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -132,7 +131,7 @@ public class PersonCOntroller : Controller {
             byte[] valueBytes = System.Convert.FromBase64String(queryB64);
             string stringFilter = Uri.UnescapeDataString(System.Text.Encoding.UTF8.GetString(valueBytes));
 
-            response.data = new PersonRepository().countPersons(stringFilter);
+            response.data = new TeacherRepository().countTeacher(stringFilter);
             response.oparationStatus = Status.OK;
 
             return StatusCode(200, response);
@@ -143,10 +142,9 @@ public class PersonCOntroller : Controller {
         }
     }
 
-
     [HttpGet]
-    [Route("countPersons")]
-    public ActionResult<OperationResponseModel> countPersons([FromHeader] String userToken) {
+    [Route("countTeachers")]
+    public ActionResult<OperationResponseModel> countTeacher([FromHeader] String userToken) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -154,15 +152,15 @@ public class PersonCOntroller : Controller {
             response.message = "userToken Inválido.";
             return StatusCode(401, response);
         }
-        long result = new PersonRepository().countPersons();
+        long result = new TeacherRepository().countTeacher();
         response.oparationStatus = Status.OK;
         response.data = result;
         return Ok(response);
     }
 
     [HttpGet]
-    [Route("getPersonById")]
-    public ActionResult<OperationResponseModel> getPersonById([FromHeader] String userToken, [FromQuery] string codigo) {
+    [Route("getTeacherById")]
+    public ActionResult<OperationResponseModel> getTeacherById([FromHeader] String userToken, [FromQuery] string codigo) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -171,11 +169,12 @@ public class PersonCOntroller : Controller {
             return StatusCode(401, response);
         }
 
-        PersonModel result = new PersonRepository().getPersonById(codigo);
+        TeacherModel result = new TeacherRepository().getTeacherById(codigo);
         response.oparationStatus = Status.OK;
         response.data = result;
 
         return StatusCode(200, response);
     }
+
 
 }
