@@ -25,10 +25,10 @@ public class WorkExperienceModel {
     public string areaAtuacaoID { get; set; }
 
     [BsonElement("dataInicio")]
-    public DateTime dataInicio { get; set; }
+    public DateTime? dataInicio { get; set; } = null;
 
     [BsonElement("dataFim")]
-    public DateTime dataFim { get; set; }
+    public DateTime? dataFim { get; set; } = null;
 
     [BsonElement("descricao")]
     public string descricao { get; set; }
