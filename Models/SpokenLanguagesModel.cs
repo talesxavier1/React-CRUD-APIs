@@ -5,7 +5,7 @@ public class SpokenLanguagesModel {
 
     [BsonId]
     [BsonElement("codigo")]
-    public string id { get; set; }
+    public string codigo { get; set; }
 
     [BsonElement("codigoRef")]
     public string codigoRef { get; set; }
@@ -23,7 +23,7 @@ public class SpokenLanguagesModel {
     public ControllerModel dataController;
 
     public SpokenLanguagesModel() {
-        this.id = Guid.NewGuid().ToString();
+        this.codigo = Guid.NewGuid().ToString();
     }
 
 }
