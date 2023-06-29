@@ -119,7 +119,7 @@ public class CourseRepository : ICourseRepository {
             if (currentCourse == null) { return false; }
 
             List<UpdateDefinition<CourseModel>> updateDefinitions = new();
-            foreach (PropertyInfo property in updateDefinitions.GetType().GetProperties()) {
+            foreach (PropertyInfo property in course.GetType().GetProperties()) {
                 updateDefinitions.Add(Builders<CourseModel>.Update.Set(property.Name, property.GetValue(course)));
             }
             currentCourse.dataController.updateDate = DateTime.UtcNow.AddHours(-3);
