@@ -120,7 +120,7 @@ public class SpokenLanguagesRepository : ISpokenLanguagesRepository {
             if (currentspokenLanguagesModel == null) { return false; }
 
             List<UpdateDefinition<SpokenLanguagesModel>> updateDefinitions = new();
-            foreach (PropertyInfo property in updateDefinitions.GetType().GetProperties()) {
+            foreach (PropertyInfo property in spokenLanguages.GetType().GetProperties()) {
                 updateDefinitions.Add(Builders<SpokenLanguagesModel>.Update.Set(property.Name, property.GetValue(spokenLanguages)));
             }
             currentspokenLanguagesModel.dataController.updateDate = DateTime.UtcNow.AddHours(-3);
