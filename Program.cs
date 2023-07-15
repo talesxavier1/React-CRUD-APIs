@@ -1,7 +1,5 @@
 using SingularChatAPIs.BD;
 using SingularChatAPIs.Loger;
-using System.Text;
-using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 MongoDBConnection.start();
@@ -20,6 +18,7 @@ app.Use(async (context, next) => {
 
 
     /* = = = = = = = = = = = = = = = = = = = = LOGGER = = = = = = = = = = = = = = = = = = = = */
+    /*
     var headerDictionary = new Dictionary<string, string>();
     foreach (var VALUE in context.Request.Headers.Keys) {
         headerDictionary.Add(VALUE, context.Request.Headers[VALUE]);
@@ -37,6 +36,7 @@ app.Use(async (context, next) => {
         isProd = !app.Environment.IsDevelopment()
     });
     context.Request.Body.Position = 0;
+    */
     /* = = = = = = = = = = = = = = = = = = = = = = =  = = = = = = = = = = = = = = = = = = = = */
 
     await next.Invoke();
