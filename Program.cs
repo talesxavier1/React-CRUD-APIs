@@ -1,5 +1,6 @@
 using SingularChatAPIs.BD;
 using SingularChatAPIs.Loger;
+using SingularChatAPIs.utils;
 
 var builder = WebApplication.CreateBuilder(args);
 MongoDBConnection.start();
@@ -46,15 +47,12 @@ app.UseCors(x => {
     x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
 });
 
-app.UseSwagger();
-app.UseSwaggerUI();
-
-/*
-if (app.Environment.IsDevelopment()) {
+String SwaggerEnabled = AppSettings.appSetting["SwaggerEnabled"];
+if (SwaggerEnabled.Equals("true")) {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-*/
+
 
 app.UseAuthorization();
 

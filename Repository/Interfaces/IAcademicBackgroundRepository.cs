@@ -11,6 +11,5 @@ public interface IAcademicBackgroundRepository {
     public Boolean logicalDeleteAcademicBackground(String[] codigos, UserModel user);
     public long count();
     public long count(String query);
-
 }
 
