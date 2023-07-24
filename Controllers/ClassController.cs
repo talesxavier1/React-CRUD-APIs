@@ -159,7 +159,7 @@ public class ClassController : Controller {
     }
 
     [HttpGet]
-    [Route("getClssById")]
+    [Route("getClassById")]
     public ActionResult<OperationResponseModel> getClassById([FromHeader] String userToken, [FromQuery] string codigo) {
         OperationResponseModel response = new();
 
