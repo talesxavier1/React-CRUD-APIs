@@ -6,12 +6,12 @@ using SingularChatAPIs.ResponseModels.ENUMs;
 
 namespace SingularChatAPIs.Controllers;
 [ApiController]
-[Route("ClassKnowledgeArea")]
-public class ClassKnowledgeAreaController : Controller {
+[Route("KnowledgeArea")]
+public class KnowledgeAreaController : Controller {
 
     [HttpPost]
-    [Route("addClassKnowledgeArea")]
-    public ActionResult<OperationResponseModel> addClassKnowledgeArea([FromHeader] string userToken, [FromBody] ClassKnowledgeAreaModel classKnowledgeAreaModel) {
+    [Route("addKnowledgeArea")]
+    public ActionResult<OperationResponseModel> addKnowledgeArea([FromHeader] string userToken, [FromBody] KnowledgeAreaModel classKnowledgeAreaModel) {
         UserRepository userRepository = new();
         OperationResponseModel response = new();
 
@@ -23,7 +23,7 @@ public class ClassKnowledgeAreaController : Controller {
         UserModel currentUser = userRepository.getUserByToken(userToken);
 
 
-        Boolean result = new ClassKnowledgeAreaRepository().addClassKnowledgeArea(classKnowledgeAreaModel, currentUser);
+        Boolean result = new KnowledgeAreaRepository().addKnowledgeArea(classKnowledgeAreaModel, currentUser);
         response.oparationStatus = result == true ? Status.OK : Status.NOK;
         response.data = classKnowledgeAreaModel;
 
@@ -31,8 +31,8 @@ public class ClassKnowledgeAreaController : Controller {
     }
 
     [HttpGet]
-    [Route("countClassKnowledgeAreas")]
-    public ActionResult<OperationResponseModel> countClassKnowledgeAreas([FromHeader] string userToken) {
+    [Route("countKnowledgeAreas")]
+    public ActionResult<OperationResponseModel> countKnowledgeAreas([FromHeader] string userToken) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -41,7 +41,7 @@ public class ClassKnowledgeAreaController : Controller {
             return StatusCode(401, response);
         }
 
-        long result = new ClassKnowledgeAreaRepository().count();
+        long result = new KnowledgeAreaRepository().count();
         response.data = result;
         response.oparationStatus = Status.OK;
 
@@ -49,8 +49,8 @@ public class ClassKnowledgeAreaController : Controller {
     }
 
     [HttpPost]
-    [Route("countClassKnowledgeAreasByQuery")]
-    public ActionResult<OperationResponseModel> countClassKnowledgeAreasByQuery([FromHeader] string userToken, [FromBody] string query) {
+    [Route("countKnowledgeAreasByQuery")]
+    public ActionResult<OperationResponseModel> countKnowledgeAreasByQuery([FromHeader] string userToken, [FromBody] string query) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -63,7 +63,7 @@ public class ClassKnowledgeAreaController : Controller {
             byte[] valueBytes = System.Convert.FromBase64String(query);
             string stringFilter = Uri.UnescapeDataString(System.Text.Encoding.UTF8.GetString(valueBytes));
 
-            long result = new ClassKnowledgeAreaRepository().count(stringFilter);
+            long result = new KnowledgeAreaRepository().count(stringFilter);
             response.data = result;
             response.oparationStatus = Status.OK;
             return Ok(response);
@@ -75,8 +75,8 @@ public class ClassKnowledgeAreaController : Controller {
     }
 
     [HttpGet]
-    [Route("getClassKnowledgeAreaById")]
-    public ActionResult<OperationResponseModel> getClassKnowledgeAreaById([FromHeader] string userToken, [FromQuery] string codigo) {
+    [Route("getKnowledgeAreaById")]
+    public ActionResult<OperationResponseModel> getKnowledgeAreaById([FromHeader] string userToken, [FromQuery] string codigo) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -85,15 +85,15 @@ public class ClassKnowledgeAreaController : Controller {
             return StatusCode(401, response);
         }
 
-        var result = new ClassKnowledgeAreaRepository().getClassKnowledgeAreaById(codigo);
+        var result = new KnowledgeAreaRepository().getKnowledgeAreaById(codigo);
         response.data = result;
         response.oparationStatus = Status.OK;
         return Ok(response);
     }
 
     [HttpGet]
-    [Route("getClassKnowledgeAreas")]
-    public ActionResult<OperationResponseModel> getClassKnowledgeAreas([FromHeader] string userToken, [FromQuery] int skip, [FromQuery] int take) {
+    [Route("getKnowledgeAreas")]
+    public ActionResult<OperationResponseModel> getKnowledgeAreas([FromHeader] string userToken, [FromQuery] int skip, [FromQuery] int take) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -102,15 +102,15 @@ public class ClassKnowledgeAreaController : Controller {
             return StatusCode(401, response);
         }
 
-        List<ClassKnowledgeAreaModel> result = new ClassKnowledgeAreaRepository().getClassKnowledgeAreas(skip, take);
+        List<KnowledgeAreaModel> result = new KnowledgeAreaRepository().getKnowledgeAreas(skip, take);
         response.data = result;
         response.oparationStatus = Status.OK;
         return Ok(response);
     }
 
     [HttpPost]
-    [Route("getClassKnowledgeAreasByQuery")]
-    public ActionResult<OperationResponseModel> getClassKnowledgeAreasByQuery([FromHeader] string userToken, [FromQuery] int skip, [FromQuery] int take, [FromBody] string query) {
+    [Route("getKnowledgeAreasByQuery")]
+    public ActionResult<OperationResponseModel> getKnowledgeAreasByQuery([FromHeader] string userToken, [FromQuery] int skip, [FromQuery] int take, [FromBody] string query) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -123,7 +123,7 @@ public class ClassKnowledgeAreaController : Controller {
             byte[] valueBytes = System.Convert.FromBase64String(query);
             string stringFilter = Uri.UnescapeDataString(System.Text.Encoding.UTF8.GetString(valueBytes));
 
-            List<ClassKnowledgeAreaModel> result = new ClassKnowledgeAreaRepository().getClassKnowledgeAreas(skip, take, stringFilter);
+            List<KnowledgeAreaModel> result = new KnowledgeAreaRepository().getKnowledgeAreas(skip, take, stringFilter);
             response.data = result;
             response.oparationStatus = Status.OK;
             return Ok(response);
@@ -135,8 +135,8 @@ public class ClassKnowledgeAreaController : Controller {
     }
 
     [HttpPost]
-    [Route("logicalDeleteClassKnowledgeArea")]
-    public ActionResult<OperationResponseModel> logicalDeleteClassKnowledgeArea([FromHeader] string userToken, [FromQuery] string[] codigos) {
+    [Route("logicalDeleteKnowledgeArea")]
+    public ActionResult<OperationResponseModel> logicalDeleteKnowledgeArea([FromHeader] string userToken, [FromQuery] string[] codigos) {
         UserRepository userRepository = new();
         OperationResponseModel response = new();
 
@@ -147,15 +147,15 @@ public class ClassKnowledgeAreaController : Controller {
         }
         UserModel currentUser = userRepository.getUserByToken(userToken);
 
-        Boolean result = new ClassKnowledgeAreaRepository().logicalDeleteClassKnowledgeArea(codigos, currentUser);
+        Boolean result = new KnowledgeAreaRepository().logicalDeleteKnowledgeArea(codigos, currentUser);
         response.oparationStatus = result == true ? Status.OK : Status.NOK;
 
         return Ok(response);
     }
 
     [HttpPost]
-    [Route("modifyClassKnowledgeArea")]
-    public ActionResult<OperationResponseModel> modifyClassKnowledgeArea([FromHeader] string userToken, [FromBody] ClassKnowledgeAreaModel classKnowledgeAreaModel) {
+    [Route("modifyKnowledgeArea")]
+    public ActionResult<OperationResponseModel> modifyKnowledgeArea([FromHeader] string userToken, [FromBody] KnowledgeAreaModel classKnowledgeAreaModel) {
         UserRepository userRepository = new();
         OperationResponseModel response = new();
 
@@ -166,7 +166,7 @@ public class ClassKnowledgeAreaController : Controller {
         }
         UserModel currentUser = userRepository.getUserByToken(userToken);
 
-        Boolean result = new ClassKnowledgeAreaRepository().updateClassKnowledgeArea(classKnowledgeAreaModel, currentUser);
+        Boolean result = new KnowledgeAreaRepository().updateKnowledgeArea(classKnowledgeAreaModel, currentUser);
         response.oparationStatus = result == true ? Status.OK : Status.NOK;
         response.data = classKnowledgeAreaModel;
         return Ok(response);
