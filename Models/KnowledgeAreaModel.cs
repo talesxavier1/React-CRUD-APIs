@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 
 namespace SingularChatAPIs.Models;
-public class ClassKnowledgeAreaModel {
+public class KnowledgeAreaModel {
 
     [BsonId]
     public string codigo { get; set; }
@@ -12,7 +12,7 @@ public class ClassKnowledgeAreaModel {
     [BsonElement("dataController")]
     public ControllerModel dataController;
 
-    public ClassKnowledgeAreaModel() {
+    public KnowledgeAreaModel() {
         this.codigo = Guid.NewGuid().ToString();
     }
 }
