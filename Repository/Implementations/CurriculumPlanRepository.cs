@@ -29,17 +29,27 @@ public class CurriculumPlanRepository : ICurriculumPlanRepository {
         }
     }
 
-    public long count() {
-        long result = collection.CountDocuments(DOC => DOC.dataController.active == true);
+    public long count(string? codigoRef) {
+        long result = 0;
+        if (codigoRef != null) {
+            result = collection.CountDocuments(DOC => DOC.dataController.active == true && DOC.codigoRef.Equals(codigoRef));
+        }
+        result = collection.CountDocuments(DOC => DOC.dataController.active == true);
+
         return result;
     }
 
-    public long count(string query) {
+    public long count(string query, string? codigoRef) {
         dynamic? queryObject = JsonConvert.DeserializeObject<dynamic>(query);
         if (queryObject == null) {
             return 0;
         }
         queryObject["dataController.active"] = true;
+
+        if (codigoRef != null) {
+            queryObject.codigoRef = codigoRef;
+        }
+
         string finalQueryString = JsonConvert.SerializeObject(queryObject);
 
         return collection.Find(finalQueryString).CountDocuments();
@@ -55,17 +65,24 @@ public class CurriculumPlanRepository : ICurriculumPlanRepository {
         return result;
     }
 
-    public List<CurriculumPlanModel> getCurriculumPlans(int skip, int take) {
+    public List<CurriculumPlanModel> getCurriculumPlans(int skip, int take, string? codigoRef) {
+        if (codigoRef != null) {
+            return collection.Find(DOC => DOC.dataController.active == true && DOC.codigoRef.Equals(codigoRef)).Skip(skip).Limit(take).ToList();
+        }
         return collection.Find(DOC => (DOC.dataController.active == true)).Skip(skip).Limit(take).ToList();
     }
 
-    public List<CurriculumPlanModel> getCurriculumPlans(int skip, int take, string query) {
+    public List<CurriculumPlanModel> getCurriculumPlans(int skip, int take, string query, string? codigoRef) {
         try {
             dynamic? queryObject = JsonConvert.DeserializeObject<dynamic>(query);
             if (queryObject == null) {
                 throw new Exception();
             }
             queryObject["dataController.active"] = true;
+
+            if (codigoRef != null) {
+                queryObject.codigoRef = codigoRef;
+            }
 
             string finalQueryString = JsonConvert.SerializeObject(queryObject);
 
