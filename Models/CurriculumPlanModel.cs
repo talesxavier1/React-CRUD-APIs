@@ -6,6 +6,9 @@ public class CurriculumPlanModel {
     [BsonId]
     public string codigo { get; set; }
 
+    [BsonElement("codigoRef")]
+    public string codigoRef { get; set; }
+
     [BsonElement("supplementary")]
     public string supplementary { get; set; }
 
