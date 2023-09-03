@@ -33,7 +33,7 @@ public class CurriculumPlanController : Controller {
 
     [HttpGet]
     [Route("countCurriculumPlans")]
-    public ActionResult<OperationResponseModel> countCurriculumPlans([FromHeader] string userToken) {
+    public ActionResult<OperationResponseModel> countCurriculumPlans([FromHeader] string userToken, [FromQuery] string? codigoRef) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -42,7 +42,7 @@ public class CurriculumPlanController : Controller {
             return StatusCode(401, response);
         }
 
-        long result = new CurriculumPlanRepository().count();
+        long result = new CurriculumPlanRepository().count(codigoRef);
         response.data = result;
         response.oparationStatus = Status.OK;
 
@@ -51,7 +51,7 @@ public class CurriculumPlanController : Controller {
 
     [HttpPost]
     [Route("countCurriculumPlansByQuery")]
-    public ActionResult<OperationResponseModel> countCurriculumPlansByQuery([FromHeader] string userToken, [FromBody] string query) {
+    public ActionResult<OperationResponseModel> countCurriculumPlansByQuery([FromHeader] string userToken, [FromBody] string query, [FromQuery] string? codigoRef) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -64,7 +64,7 @@ public class CurriculumPlanController : Controller {
             byte[] valueBytes = System.Convert.FromBase64String(query);
             string stringFilter = Uri.UnescapeDataString(System.Text.Encoding.UTF8.GetString(valueBytes));
 
-            long result = new CurriculumPlanRepository().count(stringFilter);
+            long result = new CurriculumPlanRepository().count(stringFilter, codigoRef);
             response.data = result;
             response.oparationStatus = Status.OK;
             return Ok(response);
@@ -94,7 +94,7 @@ public class CurriculumPlanController : Controller {
 
     [HttpGet]
     [Route("getCurriculumPlans")]
-    public ActionResult<OperationResponseModel> getCurriculumPlans([FromHeader] string userToken, [FromQuery] int skip, [FromQuery] int take) {
+    public ActionResult<OperationResponseModel> getCurriculumPlans([FromHeader] string userToken, [FromQuery] int skip, [FromQuery] int take, [FromQuery] string? codigoRef) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -103,7 +103,7 @@ public class CurriculumPlanController : Controller {
             return StatusCode(401, response);
         }
 
-        List<CurriculumPlanModel> result = new CurriculumPlanRepository().getCurriculumPlans(skip, take);
+        List<CurriculumPlanModel> result = new CurriculumPlanRepository().getCurriculumPlans(skip, take, codigoRef);
         response.data = result;
         response.oparationStatus = Status.OK;
         return Ok(response);
@@ -111,7 +111,7 @@ public class CurriculumPlanController : Controller {
 
     [HttpPost]
     [Route("getCurriculumPlansByQuery")]
-    public ActionResult<OperationResponseModel> getCurriculumPlansByQuery([FromHeader] string userToken, [FromQuery] int skip, [FromQuery] int take, [FromBody] string query) {
+    public ActionResult<OperationResponseModel> getCurriculumPlansByQuery([FromHeader] string userToken, [FromQuery] int skip, [FromQuery] int take, [FromBody] string query, [FromQuery] string? codigoRef) {
         OperationResponseModel response = new();
 
         if (!new UserRepository().validateToken(userToken)) {
@@ -124,7 +124,7 @@ public class CurriculumPlanController : Controller {
             byte[] valueBytes = System.Convert.FromBase64String(query);
             string stringFilter = Uri.UnescapeDataString(System.Text.Encoding.UTF8.GetString(valueBytes));
 
-            List<CurriculumPlanModel> result = new CurriculumPlanRepository().getCurriculumPlans(skip, take, stringFilter);
+            List<CurriculumPlanModel> result = new CurriculumPlanRepository().getCurriculumPlans(skip, take, stringFilter, codigoRef);
             response.data = result;
             response.oparationStatus = Status.OK;
             return Ok(response);
