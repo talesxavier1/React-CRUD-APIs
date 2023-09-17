@@ -15,6 +15,7 @@ public class AcademicBackgroundRepository : IAcademicBackgroundRepository {
         collection = database.GetCollection<AcademicBackgroundModel>("AcademicBackground");
     }
 
+
     public bool addAcademicBackground(AcademicBackgroundModel academicBackgroundModel, UserModel user) {
         try {
             academicBackgroundModel.dataController = new ControllerModel() {
